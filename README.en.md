@@ -1,8 +1,8 @@
-[🇫🇷 Français](./README.md) | 🇬🇧 English
+[Français](./README.md) | English
 
 # GoPool Variable Speed Pool Pump — Home Assistant Integration (localtuya)
 
-Complete documentation to integrate a [GoPiscine](https://gopiscine.ca) variable speed pool pump into Home Assistant via [localtuya (xZetsubou fork)](https://github.com/xZetsubou/hass-localtuya), with **100% local** control (no dependency on the Tuya Cloud API at runtime).
+Complete documentation to integrate a [GoPool](https://gopool.ca) variable speed pool pump into Home Assistant via [localtuya (xZetsubou fork)](https://github.com/xZetsubou/hass-localtuya), with **100% local** control (no dependency on the Tuya Cloud API at runtime).
 
 **Compatibility**: tested and confirmed on the **AG1 1.5HP** model (above-ground pool). The **IG1** and **IG2** models (in-ground pool) likely share the same Tuya control board and DP schema (`model ID: e1n8gbg4` on the Tuya IoT platform) — not directly tested, but the configuration below should apply as-is or with minor adjustments. If you confirm it works on IG1/IG2, a contribution/issue is welcome.
 
