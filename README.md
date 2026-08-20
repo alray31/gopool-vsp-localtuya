@@ -1,3 +1,5 @@
+🇫🇷 Français | [🇬🇧 English](./README.en.md)
+
 # GoPool Variable Speed Pool Pump — Intégration Home Assistant (localtuya)
 
 Documentation complète pour intégrer une pompe de piscine à vitesse variable [GoPiscine](https://gopiscine.ca) dans Home Assistant via [localtuya (fork xZetsubou)](https://github.com/xZetsubou/hass-localtuya), en contrôle **100% local** (sans dépendre du Cloud API Tuya au runtime).
@@ -20,7 +22,6 @@ Documentation complète pour intégrer une pompe de piscine à vitesse variable 
 - [Courbe RPM → Puissance (W)](#courbe-rpm--puissance-w)
 - [Capteurs Puissance et Énergie](#capteurs-puissance-et-énergie)
 - [Capteurs de remplacement (DP non fonctionnels)](#capteurs-de-remplacement-dp-non-fonctionnels)
-- [Limitations connues](#limitations-connues)
 
 ## Prérequis
 
