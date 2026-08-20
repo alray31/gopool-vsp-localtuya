@@ -36,8 +36,9 @@ Cette méthode ne dépend pas d'un abonnement Cloud API actif dans Home Assistan
 1. Aller sur [iot.tuya.com](https://iot.tuya.com) et se connecter avec le compte lié à ton app Tuya Smart / Smart Life.
 2. Créer (ou utiliser) un **Cloud Development Project** (Cloud → Development → Create Cloud Project).
 3. Sous l'onglet **Devices**, lier le compte d'application ("Link Tuya App Account") si ce n'est pas déjà fait — ça expose tous les appareils appairés à ce projet.
-4. Trouver la pompe dans la liste, clique dessus pour voir ses détails : le **Device ID** et la **Local Key** y sont affichés directement. **ATTENTION** La Local Key change de valeur à chaque fois que l'ont supprime la pompe et qu'on la rajoute à nouveau dans l'app Tuya / Smartlife. Il est donc recommandé de ne jamais le faire pour éviter un changement de Local Key.
-5. Pour l'**adresse IP locale** : consulter la table des clients DHCP du routeur. Fixer une IP statique/réservation DHCP pour cet appareil pour éviter que localtuya perde la connexion après un changement d'IP.
+4. Trouver la pompe dans la liste, clique dessus pour voir ses détails : le **Device ID** y sest affichés directement.
+5. Aller dans Cloud / API Explorer / IoT Core / Device Management / Query Device Details in Bulk. Entrer le Device ID touvé à l'étape 4 et cliquer **Submit Request**. Dans le Debugging Result, Trouver et copier la **Local Key**. **ATTENTION** La Local Key change de valeur à chaque fois que l'ont supprime la pompe et qu'on la rajoute à nouveau dans l'app Tuya / Smartlife. Il est donc recommandé de ne jamais le faire pour éviter un changement de Local Key.
+6. Pour l'**adresse IP locale** : consulter la table des clients DHCP du routeur. Fixer une IP statique/réservation DHCP pour cet appareil pour éviter que localtuya perde la connexion après un changement d'IP.
 
 ## Ajouter l'appareil **manuellement** dans localtuya
 
@@ -68,18 +69,18 @@ localtuya (fork xZetsubou) supporte l'import en bloc d'entités via un fichier "
 | DP ID | Code | Nom | Type | Valeurs possibles | Fonctionnel en local? | Notes |
 |---|---|---|---|---|---|---|
 | 1 | switch | Power | bool | true / false | ✅ Oui | Interrupteur principal |
-| 2 | fault | Fault | bitmap (ro) | 0-15 (voir décodage) | ❌ Non | Jamais mis à jour localement, figé depuis l'appairage |
-| 101 | product_id | Product ID | string (ro) | — | ❌ Non | Toujours vide sur ce device |
+| 2 | fault | Fault | bitmap (ro) | 0-15 (voir décodage) | ❌ Non | Jamais mis à jour localement, figé à 0 sur l'API Cloud depuis l'appairage - probablement normal car pas d'erreur survenue depuis appairage |
+| 101 | product_id | Product ID | string (ro) | — | ❌ Non | Toujours vide sur ce device local et API cloud |
 | 102 | schedule_switch | Schedule | bool | true / false | ✅ Oui | Active le mode horaire programmé |
 | 103 | cur_speed | Current Speed | value | 1150–3450, pas 50 (rpm) | ✅ Oui | **Contrôle réellement la vitesse** malgré son nom "current" |
 | 104 | current_time | Current Time | value (rw) | 0–9999, encodage hex spécial (HHMM) | ❌ Non | Format complexe, jamais utilisé/mis à jour |
 | 105 | time_sync | Time Sync | enum (rw) | `["read_time"]` | ❌ Non | DP commande, jamais mis à jour localement |
 | 106 | noload_protection | No Load Protection | bool | true / false | ✅ Oui | Protection marche à vide |
-| 107 | set_speed | Set Speed | value | 1150–3450, pas 50 (rpm) | ❌ Non | Jamais écrit par le firmware — c'est **DP 103** qui contrôle la vitesse en pratique |
-| 108 | motor_operation_state | Motor Running | bool (rw) | true / false | ❌ Non | Figé à `false` depuis l'appairage, ne reflète jamais l'état réel du moteur |
-| 124 | overall_status | Overall Status | enum (ro, bit-flags) | Start_Stop / Self_suction / completed / quick_clean / Time_out / Alarm / mode | ❌ Non | Jamais mis à jour localement |
+| 107 | set_speed | Set Speed | value | 1150–3450, pas 50 (rpm) | ❌ Non | Jamais écrit par le firmware — c'est **DP 103** qui contrôle la vitesse |
+| 108 | motor_operation_state | Motor Running | bool (rw) | true / false | ❌ Non | Figé à `false` depuis l'appairage, ne reflète jamais l'état réel du moteur, ni localement, ni sur l'API Cloud |
+| 124 | overall_status | Overall Status | enum (ro, bit-flags) | Start_Stop / Self_suction / completed / quick_clean / Time_out / Alarm / mode | ❌ Non | Jamais mis à jour localement ni sur l'API Cloud |
 | 125 | soft_setup | Soft Setup | enum (rw) | `["read_setup"]` | ❌ Non | DP commande, jamais mis à jour |
-| 137–140 | stage1-4_switch | Stage 1–4 Enabled | bool | true / false | ❌ Non | Jamais transmis localement, même après toggle explicite via HA |
+| 137–140 | stage1-4_switch | Stage 1–4 Enabled | bool | true / false | ❌ Non | Jamais transmis localement, même après toggle explicite via HA, ni sur l'API Cloud  |
 | 141/143/145/147 | start_timeX_hour | Stage 1–4 Start Hour | value | 0–23, pas 1 | ✅ Oui | |
 | 142/144/146/148 | start_timeX_min | Stage 1–4 Start Minute | value | 0–50, pas 10 | ✅ Oui | Incréments de 10 min seulement (0,10,20,30,40,50) |
 | 149/152/155/158 | speed_1-4 | Stage 1–4 Speed | value | 1000–3450, pas 50 (rpm) | ✅ Oui | |
@@ -104,7 +105,7 @@ Selon la spec officielle du produit (Tuya IoT Platform, `abilityId: 2`), le DP `
 | 2 | 4 | rotating_fault (défaut de rotation) |
 | 3 | 8 | pump_blocked (pompe bloquée) |
 
-Plusieurs défauts actifs simultanément s'additionnent (ex: 6 = bits 1+2 actifs). Ce DP étant en lecture seule et non transmis localement (voir tableau ci-dessus), ce décodage n'est utilisable qu'en passant par le Cloud API Tuya.
+Plusieurs défauts actifs simultanément s'additionnent (ex: 6 = bits 1+2 actifs). Ce DP étant en lecture seule et non transmis localement (voir tableau ci-dessus), ce décodage n'est utilisable qu'en passant par le Cloud API Tuya. Il est actuellement imposible de tester puisqu'il n'y pas de faute active sur la pompe utilisée pour ces tests. À confirmer plus tard si possible.
 
 ## Courbe RPM → Puissance (W)
 
