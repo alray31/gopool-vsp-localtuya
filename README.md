@@ -1,4 +1,4 @@
-🇫🇷 Français | [🇬🇧 English](./README.en.md)
+Français | [English](./README.en.md)
 
 # GoPool Variable Speed Pool Pump — Intégration Home Assistant (localtuya)
 
