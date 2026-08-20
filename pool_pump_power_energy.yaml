@@ -1,0 +1,107 @@
+# Capteur de puissance (W) pour la pompe de piscine
+# À coller dans configuration.yaml (ou dans un fichier inclus via !include)
+#
+# Entités utilisées :
+#   - switch.pompe_piscine     (interrupteur principal)
+#   - number.pompe_piscine_rpm (vitesse en RPM)
+
+template:
+  - sensor:
+      - name: "Pool Pump Power"
+        unique_id: pool_pump_power
+        unit_of_measurement: "W"
+        device_class: power
+        state_class: measurement
+        state: >
+          {% set power_curve = [
+            (1000, 35.9),
+            (1050, 40.6),
+            (1100, 45.3),
+            (1150, 50.0),
+            (1200, 54.7),
+            (1250, 59.4),
+            (1300, 64.1),
+            (1350, 68.9),
+            (1400, 73.6),
+            (1450, 78.3),
+            (1500, 83.0),
+            (1550, 90.7),
+            (1600, 98.4),
+            (1650, 106.1),
+            (1700, 113.8),
+            (1750, 121.5),
+            (1800, 129.2),
+            (1850, 136.9),
+            (1900, 144.6),
+            (1950, 152.3),
+            (2000, 160.0),
+            (2050, 172.3),
+            (2100, 184.7),
+            (2150, 197.0),
+            (2200, 209.3),
+            (2250, 221.7),
+            (2300, 234.0),
+            (2350, 246.3),
+            (2400, 258.7),
+            (2450, 271.0),
+            (2500, 283.9),
+            (2550, 296.8),
+            (2600, 309.6),
+            (2650, 322.5),
+            (2700, 335.4),
+            (2750, 348.2),
+            (2800, 361.1),
+            (2850, 374.0),
+            (2900, 395.9),
+            (2950, 417.8),
+            (3000, 439.8),
+            (3050, 461.7),
+            (3100, 483.6),
+            (3150, 505.5),
+            (3200, 527.4),
+            (3250, 549.3),
+            (3300, 571.2),
+            (3350, 593.2),
+            (3400, 615.1),
+            (3450, 637.0)
+          ] %}
+          {% set rpm = states('number.pompe_piscine_rpm') | float(0) %}
+          {% if is_state('switch.pompe_piscine', 'off') or rpm <= 0 %}
+            0
+          {% else %}
+            {% set rpm = [rpm, power_curve[0][0]] | max %}
+            {% set rpm = [rpm, power_curve[-1][0]] | min %}
+            {% set ns = namespace(result=0) %}
+            {% for i in range(power_curve|length - 1) %}
+              {% set x0, y0 = power_curve[i] %}
+              {% set x1, y1 = power_curve[i+1] %}
+              {% if rpm >= x0 and rpm <= x1 %}
+                {% set ns.result = y0 + (rpm - x0) * (y1 - y0) / (x1 - x0) %}
+              {% endif %}
+            {% endfor %}
+            {{ ns.result | round(1) }}
+          {% endif %}
+
+# --------------------------------------------------------------------
+# Pour l'énergie (kWh), ajoute le helper natif de HA (pas besoin de YAML) :
+#
+#   Paramètres → Appareils et services → Aides → + Ajouter une aide
+#   → "Intégrale - somme de Riemann"
+#   - Capteur source : sensor.pool_pump_power
+#   - Méthode : Trapézoïdale
+#   - Préfixe métrique : k (kilo)
+#   - Unité de temps : Heures
+#
+# Ça va créer un sensor.pool_pump_power_energy (ou nom similaire) en kWh,
+# compatible directement avec le Energy Dashboard de Home Assistant.
+#
+# Équivalent YAML si tu préfères, plutôt que le helper UI :
+#
+# sensor:
+#   - platform: integration
+#     source: sensor.pool_pump_power
+#     name: Pool Pump Energy
+#     unique_id: pool_pump_energy
+#     unit_prefix: k
+#     round: 3
+#     method: trapezoidal

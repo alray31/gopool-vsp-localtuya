@@ -1,0 +1,259 @@
+# Template localtuya - GoPool AG1 1.5HP Variable Speed Pool Pump
+# Ne contient que les DP confirmés fonctionnels en local (voir README.md
+# pour le détail des DP non fonctionnels et pourquoi ils sont exclus).
+#
+# Device ID: ebdc2e75cfd943ea96e1om
+# Protocole local: 3.5
+
+- switch:
+    friendly_name: Power
+    entity_category: None
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '1'
+    platform: switch
+    icon: ''
+- number:
+    friendly_name: Current Speed
+    entity_category: None
+    min_value: 1150.0
+    max_value: 3450.0
+    step_size: 50.0
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '103'
+    platform: number
+    icon: ''
+- switch:
+    friendly_name: Quick Clean
+    entity_category: None
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '189'
+    platform: switch
+    icon: ''
+- number:
+    friendly_name: Quick Clean Speed
+    entity_category: config
+    min_value: 1000.0
+    max_value: 3450.0
+    step_size: 10.0
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '190'
+    platform: number
+    icon: ''
+- number:
+    friendly_name: Quick Clean Duration (min)
+    entity_category: config
+    min_value: 10.0
+    max_value: 600.0
+    step_size: 10.0
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '191'
+    platform: number
+    icon: ''
+- switch:
+    friendly_name: Schedule
+    entity_category: None
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '102'
+    platform: switch
+    icon: ''
+- number:
+    friendly_name: Stage 1 Speed
+    entity_category: config
+    min_value: 1000.0
+    max_value: 3450.0
+    step_size: 50.0
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '149'
+    platform: number
+    icon: ''
+- number:
+    friendly_name: Stage 2 Speed
+    entity_category: config
+    min_value: 1000.0
+    max_value: 3450.0
+    step_size: 50.0
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '152'
+    platform: number
+    icon: ''
+- number:
+    friendly_name: Stage 3 Speed
+    entity_category: config
+    min_value: 1000.0
+    max_value: 3450.0
+    step_size: 50.0
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '155'
+    platform: number
+    icon: ''
+- number:
+    friendly_name: Stage 4 Speed
+    entity_category: config
+    min_value: 1000.0
+    max_value: 3450.0
+    step_size: 50.0
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '158'
+    platform: number
+    icon: ''
+- number:
+    friendly_name: Stage 1 Duration (h)
+    entity_category: config
+    min_value: 0.0
+    max_value: 24.0
+    step_size: 1.0
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '151'
+    platform: number
+    icon: ''
+- number:
+    friendly_name: Stage 2 Duration (h)
+    entity_category: config
+    min_value: 0.0
+    max_value: 24.0
+    step_size: 1.0
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '154'
+    platform: number
+    icon: ''
+- number:
+    friendly_name: Stage 3 Duration (h)
+    entity_category: config
+    min_value: 0.0
+    max_value: 24.0
+    step_size: 1.0
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '157'
+    platform: number
+    icon: ''
+- number:
+    friendly_name: Stage 4 Duration (h)
+    entity_category: config
+    min_value: 0.0
+    max_value: 24.0
+    step_size: 1.0
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '160'
+    platform: number
+    icon: ''
+- number:
+    friendly_name: Stage 1 Start Hour
+    entity_category: config
+    min_value: 0.0
+    max_value: 23.0
+    step_size: 1.0
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '141'
+    platform: number
+    icon: ''
+- number:
+    friendly_name: Stage 1 Start Minute
+    entity_category: config
+    min_value: 0.0
+    max_value: 50.0
+    step_size: 10.0
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '142'
+    platform: number
+    icon: ''
+- number:
+    friendly_name: Stage 2 Start Hour
+    entity_category: config
+    min_value: 0.0
+    max_value: 23.0
+    step_size: 1.0
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '143'
+    platform: number
+    icon: ''
+- number:
+    friendly_name: Stage 2 Start Minute
+    entity_category: config
+    min_value: 0.0
+    max_value: 50.0
+    step_size: 10.0
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '144'
+    platform: number
+    icon: ''
+- number:
+    friendly_name: Stage 3 Start Hour
+    entity_category: config
+    min_value: 0.0
+    max_value: 23.0
+    step_size: 1.0
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '145'
+    platform: number
+    icon: ''
+- number:
+    friendly_name: Stage 3 Start Minute
+    entity_category: config
+    min_value: 0.0
+    max_value: 50.0
+    step_size: 10.0
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '146'
+    platform: number
+    icon: ''
+- number:
+    friendly_name: Stage 4 Start Hour
+    entity_category: config
+    min_value: 0.0
+    max_value: 23.0
+    step_size: 1.0
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '147'
+    platform: number
+    icon: ''
+- number:
+    friendly_name: Stage 4 Start Minute
+    entity_category: config
+    min_value: 0.0
+    max_value: 50.0
+    step_size: 10.0
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '148'
+    platform: number
+    icon: ''
+- switch:
+    friendly_name: No Load Protection
+    entity_category: config
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '106'
+    platform: switch
+    icon: ''
+- number:
+    friendly_name: Timeout Duration (min)
+    entity_category: config
+    min_value: 0.0
+    max_value: 1440.0
+    step_size: 10.0
+    restore_on_reconnect: false
+    is_passive_entity: false
+    id: '188'
+    platform: number
+    icon: ''

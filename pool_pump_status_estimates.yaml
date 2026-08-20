@@ -1,0 +1,51 @@
+# Capteurs de remplacement pour schedule_status et motor_operation_state,
+# puisque ces DP sont morts dans le firmware (jamais mis à jour même quand
+# un vrai changement d'état survient).
+#
+# ⚠️ Ajuste les entity_id des Stage X Start Hour/Minute/Duration ci-dessous
+# selon les vrais noms créés dans localtuya (vérifie dans Outils de
+# développement → États).
+
+template:
+  - sensor:
+      - name: "Étape active (estimée)"
+        unique_id: pool_pump_active_stage_estimated
+        state: >
+          {% if is_state('switch.pompe_piscine', 'off') %}
+            Arrêté
+          {% else %}
+            {% set now_min = now().hour * 60 + now().minute %}
+            {% set stages = [
+              (1, states('number.pompe_piscine_stage_1_start_hour')|int(0), states('number.pompe_piscine_stage_1_start_minute')|int(0), states('number.pompe_piscine_stage_1_duration')|int(0)),
+              (2, states('number.pompe_piscine_stage_2_start_hour')|int(0), states('number.pompe_piscine_stage_2_start_minute')|int(0), states('number.pompe_piscine_stage_2_duration')|int(0)),
+              (3, states('number.pompe_piscine_stage_3_start_hour')|int(0), states('number.pompe_piscine_stage_3_start_minute')|int(0), states('number.pompe_piscine_stage_3_duration')|int(0)),
+              (4, states('number.pompe_piscine_stage_4_start_hour')|int(0), states('number.pompe_piscine_stage_4_start_minute')|int(0), states('number.pompe_piscine_stage_4_duration')|int(0))
+            ] %}
+            {% set ns = namespace(result='Aucune (hors horaire)') %}
+            {% for stage_num, h, m, dur in stages %}
+              {% set start = h * 60 + m %}
+              {% set end = start + dur * 60 %}
+              {% if end <= 1440 %}
+                {% if now_min >= start and now_min < end %}
+                  {% set ns.result = 'Stage ' ~ stage_num %}
+                {% endif %}
+              {% else %}
+                {% if now_min >= start or now_min < (end - 1440) %}
+                  {% set ns.result = 'Stage ' ~ stage_num %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+            {{ ns.result }}
+          {% endif %}
+
+      - name: "Motor Running (estimé)"
+        unique_id: pool_pump_motor_running_estimated
+        state: >
+          {{ is_state('switch.pompe_piscine', 'on') and (states('number.pompe_piscine_rpm') | float(0) > 0) }}
+
+  - binary_sensor:
+      - name: "Motor Running (estimé)"
+        unique_id: pool_pump_motor_running_estimated_bs
+        device_class: running
+        state: >
+          {{ is_state('switch.pompe_piscine', 'on') and (states('number.pompe_piscine_rpm') | float(0) > 0) }}
