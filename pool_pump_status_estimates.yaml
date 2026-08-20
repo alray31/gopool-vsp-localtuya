@@ -6,11 +6,6 @@
 # selon les vrais noms créés dans localtuya (vérifie dans Outils de
 # développement → États).
 
-template:
-  - sensor:
-      - name: "Étape active (estimée)"
-        unique_id: pool_pump_active_stage_estimated
-        state: >
           {% if is_state('switch.pompe_piscine', 'off') %}
             Arrêté
           {% else %}
@@ -37,15 +32,3 @@ template:
             {% endfor %}
             {{ ns.result }}
           {% endif %}
-
-      - name: "Motor Running (estimé)"
-        unique_id: pool_pump_motor_running_estimated
-        state: >
-          {{ is_state('switch.pompe_piscine', 'on') and (states('number.pompe_piscine_rpm') | float(0) > 0) }}
-
-  - binary_sensor:
-      - name: "Motor Running (estimé)"
-        unique_id: pool_pump_motor_running_estimated_bs
-        device_class: running
-        state: >
-          {{ is_state('switch.pompe_piscine', 'on') and (states('number.pompe_piscine_rpm') | float(0) > 0) }}
