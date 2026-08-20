@@ -1,10 +1,3 @@
-# Template localtuya - GoPool AG1 1.5HP Variable Speed Pool Pump
-# Ne contient que les DP confirmés fonctionnels en local (voir README.md
-# pour le détail des DP non fonctionnels et pourquoi ils sont exclus).
-#
-# Device ID: ebdc2e75cfd943ea96e1om
-# Protocole local: 3.5
-
 - switch:
     friendly_name: Power
     entity_category: None
