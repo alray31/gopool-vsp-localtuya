@@ -66,7 +66,7 @@ localtuya (fork xZetsubou) supporte l'import en bloc d'entités via un fichier "
 
 ## Tableau complet des Data Points (DP)
 
-| DP ID | Code | Nom | Type | Valeurs possibles | Fonctionnel en local? | Notes |
+| DP ID | Code | Nom | Type | Valeurs possibles | Fonctionnel? | Notes |
 |---|---|---|---|---|---|---|
 | 1 | switch | Power | bool | true / false | ✅ Oui | Interrupteur principal |
 | 2 | fault | Fault | bitmap (ro) | 0-15 (voir décodage) | ❌ Non | Jamais mis à jour localement, figé à 0 sur l'API Cloud depuis l'appairage - probablement normal car pas d'erreur survenue depuis appairage |
