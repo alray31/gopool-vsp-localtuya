@@ -1,3 +1,6 @@
+# DEPRECATED, SEE NEW PROJECT HERE: https://github.com/alray31/gopool-pump
+# ABANDONNÉ, VOIR LE NOUVEAU PROJET ICI: https://github.com/alray31/gopool-pump
+
 Français | [English](./README.en.md)
 
 # GoPool Variable Speed Pool Pump — Intégration Home Assistant (localtuya)
